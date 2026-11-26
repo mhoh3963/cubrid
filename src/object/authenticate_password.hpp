@@ -48,4 +48,7 @@ void encrypt_password_sha2_512 (const char *pass, char *dest);
 bool match_password (const char *user, const char *database);
 int au_set_password_internal (MOP user, const char *password, int encode, char encrypt_prefix);
 
+bool au_is_complexity_policy_enabled (void);
+int au_check_password_policy (const char *user_name, const char *password);
+
 #endif

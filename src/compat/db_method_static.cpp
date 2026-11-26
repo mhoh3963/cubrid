@@ -36,6 +36,7 @@
 #include "object_print.h" /* help_print_info */
 #include "jsp_cl.h" /* jsp_find_stored_procedure */
 #include "transform.h" /* DB_MAX_SERIAL_NAME_LENGTH */
+#include "db_client_type.hpp" /* DB_CLIENT_TYPE_LOADDB_UTILITY */
 
 // ================================================================
 // authenticate methods
@@ -163,6 +164,47 @@ void db_install_static_methods ()
 }
 
 /*
+ * au_add_user_check_password - complexity policy check of add_user, done before the user is created
+ *   return: error code
+ *   name(in): name of the new user
+ *   password(in): password argument of add_user (may be NULL)
+ *   skip_password(out): set when the empty password of loaddb must not be set
+ *
+ * Note: unloaddb writes add_user ('X', '') even for a user with a password and sets the encoded password
+ *       afterwards, so an empty password is accepted from loaddb only.
+ */
+static int
+au_add_user_check_password (const char *name, DB_VALUE *password, bool *skip_password)
+{
+  const char *pw = NULL;
+  int client_type;
+
+  *skip_password = false;
+  if (!au_is_complexity_policy_enabled ())
+    {
+      return NO_ERROR;
+    }
+
+  if (password != NULL && DB_IS_STRING (password) && !DB_IS_NULL (password))
+    {
+      pw = db_get_string (password);
+    }
+
+  if (pw == NULL || pw[0] == '\0')
+    {
+      client_type = db_get_client_type ();
+      if (client_type == DB_CLIENT_TYPE_LOADDB_UTILITY || client_type == DB_CLIENT_TYPE_ADMIN_LOADDB_COMPAT_UNDER_11_2
+	  || client_type == DB_CLIENT_TYPE_ADMIN_LOADDB_COMPAT_UNDER_11_4)
+	{
+	  *skip_password = true;
+	  return NO_ERROR;
+	}
+    }
+
+  return au_check_password_policy (name, pw);
+}
+
+/*
  * au_add_user_method
  *   return: none
  *   class(in): class object
@@ -177,6 +219,7 @@ au_add_user_method (MOP class_mop, DB_VALUE *returnval, DB_VALUE *name, DB_VALUE
   int exists;
   MOP user;
   const char *tmp = NULL;
+  bool skip_password = false;
 
   if (name != NULL && DB_IS_STRING (name) && !DB_IS_NULL (name) && ((tmp = db_get_string (name)) != NULL))
     {
@@ -198,6 +241,10 @@ au_add_user_method (MOP class_mop, DB_VALUE *returnval, DB_VALUE *name, DB_VALUE
 	  er_set (ER_ERROR_SEVERITY, ARG_FILE_LINE, error, 0);
 	  db_make_error (returnval, error);
 	}
+      else if ((error = au_add_user_check_password (db_get_string (name), password, &skip_password)) != NO_ERROR)
+	{
+	  db_make_error (returnval, error);
+	}
       else
 	{
 	  user = au_add_user (db_get_string (name), &exists);
@@ -214,7 +261,7 @@ au_add_user_method (MOP class_mop, DB_VALUE *returnval, DB_VALUE *name, DB_VALUE
 	    }
 	  else
 	    {
-	      if (password != NULL && DB_IS_STRING (password) && !DB_IS_NULL (password))
+	      if (password != NULL && DB_IS_STRING (password) && !DB_IS_NULL (password) && !skip_password)
 		{
 		  error = au_set_password_encrypt (user, db_get_string (password));
 		  if (error != NO_ERROR)

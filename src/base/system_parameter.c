@@ -779,6 +779,8 @@ static const char sysprm_ha_conf_file_name[] = "cubrid_ha.conf";
 
 #define PRM_NAME_NUMERIC_EMPTY_STRING_AS_NULL "numeric_empty_string_as_null"
 
+#define PRM_NAME_ENABLE_COMPLEXITY_POLICY "enable_complexity_policy"
+
 /*
  * Note about ERROR_LIST and INTEGER_LIST type
  * ERROR_LIST type is an array of bool type with the size of -(ER_LAST_ERROR)
@@ -2527,6 +2529,10 @@ static unsigned int prm_stats_fullscan_max_pages_flag = 0;
 bool PRM_NUMERIC_EMPTY_STRING_AS_NULL = false;
 static bool prm_numeric_empty_string_as_null_default = false;
 static unsigned int prm_numeric_empty_string_as_null_flag = 0;
+
+bool PRM_ENABLE_COMPLEXITY_POLICY = false;
+static bool prm_enable_complexity_policy_default = false;
+static unsigned int prm_enable_complexity_policy_flag = 0;
 
 typedef int (*DUP_PRM_FUNC) (void *, SYSPRM_DATATYPE, void *, SYSPRM_DATATYPE);
 
@@ -6663,6 +6669,17 @@ SYSPRM_PARAM prm_Def[] = {
    &prm_numeric_empty_string_as_null_flag,
    (void *) &prm_numeric_empty_string_as_null_default,
    (void *) &PRM_NUMERIC_EMPTY_STRING_AS_NULL,
+   (void *) NULL, (void *) NULL,
+   (char *) NULL,
+   (DUP_PRM_FUNC) NULL,
+   (DUP_PRM_FUNC) NULL},
+  {PRM_ID_ENABLE_COMPLEXITY_POLICY,
+   PRM_NAME_ENABLE_COMPLEXITY_POLICY,
+   (PRM_FOR_SERVER | PRM_FOR_CLIENT | PRM_FORCE_SERVER),
+   PRM_BOOLEAN,
+   &prm_enable_complexity_policy_flag,
+   (void *) &prm_enable_complexity_policy_default,
+   (void *) &PRM_ENABLE_COMPLEXITY_POLICY,
    (void *) NULL, (void *) NULL,
    (char *) NULL,
    (DUP_PRM_FUNC) NULL,

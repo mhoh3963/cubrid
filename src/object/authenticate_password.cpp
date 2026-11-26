@@ -28,6 +28,9 @@
 #include "crypt_opfunc.h" /* crypt_sha_two () */
 #include "object_accessor.h"
 #include "schema_manager.h" /* sm_find_class */
+#include "system_parameter.h"
+
+#include <string.h>
 
 /*
  * Password Encoding
@@ -234,6 +237,238 @@ match_password (const char *user, const char *database)
 }
 
 /*
+ * Password complexity policy (enable_complexity_policy)
+ */
+
+/* the only special characters a password may contain */
+static const char *AU_PASSWORD_SPECIAL_CHARS = "!@#$%^&*()-_=+{}:?.,~";
+
+/* runs of 4 or more keys taken from these, forward or backward, are rejected */
+static const char *AU_PASSWORD_SEQUENCES[] =
+{
+  "abcdefghijklmnopqrstuvwxyz",
+  "0123456789",
+  "`1234567890-=",
+  "qwertyuiop[]",
+  "asdfghjkl;",
+  "zxcvbnm,./"
+};
+
+#define AU_PASSWORD_MIN_LENGTH_2_KINDS  10
+#define AU_PASSWORD_MIN_LENGTH_3_KINDS  8
+#define AU_PASSWORD_MIN_USER_NAME       3
+#define AU_PASSWORD_MAX_SAME_KEY_RUN    3
+#define AU_PASSWORD_MIN_SEQUENCE_RUN    4
+
+/*
+ * au_password_key - the key of a US keyboard that types the character
+ *   return: lower-case letter, or the unshifted character of the key
+ *   c(in): character of a password (already checked to be allowed)
+ *
+ * Note: Repetition and sequence rules compare keys, not characters, so "aAaA" and "1!1!" are the same key four times.
+ */
+static char
+au_password_key (char c)
+{
+  static const char *shifted = "!@#$%^&*()_+{}:?~";
+  static const char *unshifted = "1234567890-=[];/`";
+  const char *p;
+
+  if (c >= 'A' && c <= 'Z')
+    {
+      return (char) (c - 'A' + 'a');
+    }
+
+  p = strchr (shifted, c);
+  if (p != NULL && *p != '\0')
+    {
+      return unshifted[p - shifted];
+    }
+
+  return c;
+}
+
+static bool
+au_password_contains_ci (const char *password, const char *word)
+{
+  size_t plen = strlen (password);
+  size_t wlen = strlen (word);
+  size_t i, j;
+
+  for (i = 0; i + wlen <= plen; i++)
+    {
+      for (j = 0; j < wlen; j++)
+	{
+	  /* only ASCII is compared; a non-ASCII byte of a user name never matches an allowed character */
+	  char a = password[i + j];
+	  char b = word[j];
+
+	  if (a >= 'A' && a <= 'Z')
+	    {
+	      a = (char) (a - 'A' + 'a');
+	    }
+	  if (b >= 'A' && b <= 'Z')
+	    {
+	      b = (char) (b - 'A' + 'a');
+	    }
+	  if (a != b)
+	    {
+	      break;
+	    }
+	}
+      if (j == wlen)
+	{
+	  return true;
+	}
+    }
+
+  return false;
+}
+
+static bool
+au_password_has_sequence (const char *keys)
+{
+  char reversed[32];
+  size_t len, i, s;
+
+  for (s = 0; s < sizeof (AU_PASSWORD_SEQUENCES) / sizeof (AU_PASSWORD_SEQUENCES[0]); s++)
+    {
+      const char *seq = AU_PASSWORD_SEQUENCES[s];
+
+      len = strlen (seq);
+      for (i = 0; i < len; i++)
+	{
+	  reversed[i] = seq[len - 1 - i];
+	}
+      reversed[len] = '\0';
+
+      for (i = 0; i + AU_PASSWORD_MIN_SEQUENCE_RUN <= len; i++)
+	{
+	  char run[AU_PASSWORD_MIN_SEQUENCE_RUN + 1];
+
+	  memcpy (run, seq + i, AU_PASSWORD_MIN_SEQUENCE_RUN);
+	  run[AU_PASSWORD_MIN_SEQUENCE_RUN] = '\0';
+	  if (strstr (keys, run) != NULL)
+	    {
+	      return true;
+	    }
+
+	  memcpy (run, reversed + i, AU_PASSWORD_MIN_SEQUENCE_RUN);
+	  if (strstr (keys, run) != NULL)
+	    {
+	      return true;
+	    }
+	}
+    }
+
+  return false;
+}
+
+/*
+ * au_is_complexity_policy_enabled - whether enable_complexity_policy is on
+ *   return: true if on
+ *
+ * Note: On a client the value is the one of the server (PRM_FORCE_SERVER).
+ */
+bool
+au_is_complexity_policy_enabled (void)
+{
+  return prm_get_bool_value (PRM_ID_ENABLE_COMPLEXITY_POLICY);
+}
+
+/*
+ * au_check_password_policy - check a plain text password against the complexity policy
+ *   return: NO_ERROR, ER_AU_PASSWORD_OVERFLOW or ER_AU_PASSWORD_POLICY_VIOLATION
+ *   user_name(in): name of the user the password is set for (may be NULL)
+ *   password(in): new password; NULL or empty is a violation
+ *
+ * Note: The caller checks au_is_complexity_policy_enabled () first. Every violation reports the same error,
+ *       so the message gives no hint about which rule failed.
+ */
+int
+au_check_password_policy (const char *user_name, const char *password)
+{
+  char keys[AU_MAX_PASSWORD_CHARS + 1];
+  bool has_upper = false, has_lower = false, has_digit = false, has_special = false;
+  int kinds, len, i, run;
+
+  if (password == NULL || password[0] == '\0')
+    {
+      goto violation;
+    }
+
+  len = (int) strlen (password);
+  if (len > AU_MAX_PASSWORD_CHARS)
+    {
+      er_set (ER_ERROR_SEVERITY, ARG_FILE_LINE, ER_AU_PASSWORD_OVERFLOW, 0);
+      return ER_AU_PASSWORD_OVERFLOW;
+    }
+
+  for (i = 0; i < len; i++)
+    {
+      char c = password[i];
+
+      if (c >= 'A' && c <= 'Z')
+	{
+	  has_upper = true;
+	}
+      else if (c >= 'a' && c <= 'z')
+	{
+	  has_lower = true;
+	}
+      else if (c >= '0' && c <= '9')
+	{
+	  has_digit = true;
+	}
+      else if (strchr (AU_PASSWORD_SPECIAL_CHARS, c) != NULL)
+	{
+	  has_special = true;
+	}
+      else
+	{
+	  goto violation;
+	}
+
+      keys[i] = au_password_key (c);
+    }
+  keys[len] = '\0';
+
+  /* all characters are ASCII here, so the length in bytes is the length in characters */
+  kinds = (int) has_upper + (int) has_lower + (int) has_digit + (int) has_special;
+  if (kinds < 2 || (kinds == 2 && len < AU_PASSWORD_MIN_LENGTH_2_KINDS)
+      || (kinds >= 3 && len < AU_PASSWORD_MIN_LENGTH_3_KINDS))
+    {
+      goto violation;
+    }
+
+  if (user_name != NULL && strlen (user_name) >= AU_PASSWORD_MIN_USER_NAME
+      && au_password_contains_ci (password, user_name))
+    {
+      goto violation;
+    }
+
+  for (i = 1, run = 1; i < len; i++)
+    {
+      run = (keys[i] == keys[i - 1]) ? run + 1 : 1;
+      if (run > AU_PASSWORD_MAX_SAME_KEY_RUN)
+	{
+	  goto violation;
+	}
+    }
+
+  if (au_password_has_sequence (keys))
+    {
+      goto violation;
+    }
+
+  return NO_ERROR;
+
+violation:
+  er_set (ER_ERROR_SEVERITY, ARG_FILE_LINE, ER_AU_PASSWORD_POLICY_VIOLATION, 0);
+  return ER_AU_PASSWORD_POLICY_VIOLATION;
+}
+
+/*
  * au_set_password_internal -  Set the password string for a user.
  *                             This should be using encrypted strings.
  *   return:error code
@@ -262,8 +497,28 @@ au_set_password_internal (MOP user, const char *password, int encode, char encry
     }
   else
     {
+      if (au_is_complexity_policy_enabled ())
+	{
+	  if (encode)
+	    {
+	      char *user_name = au_get_user_name (user);
+
+	      error = au_check_password_policy (user_name, password);
+	      if (user_name != NULL)
+		{
+		  ws_free_string (user_name);
+		}
+	    }
+	  else if (password == NULL || password[0] == '\0')
+	    {
+	      /* an encoded password can not be checked for complexity, but it must not clear the password */
+	      error = ER_AU_PASSWORD_POLICY_VIOLATION;
+	      er_set (ER_ERROR_SEVERITY, ARG_FILE_LINE, error, 0);
+	    }
+	}
+
       /* convert empty password strings to NULL passwords */
-      if (password != NULL)
+      if (error == NO_ERROR && password != NULL)
 	{
 	  len = strlen (password);
 	  if (len == 0)

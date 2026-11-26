@@ -849,7 +849,7 @@ cubrid_log_error:
  * (boot_client_initialize_css), so the cause of a db_restart () failure must be taken from its
  * return value. The CUBRID_LOG_FAILED_CONNECT set mirrors the codes that boot_client_initialize_css
  * classifies as connect errors. Unmapped errors keep CUBRID_LOG_FAILED_LOGIN so that authentication
- * failures (e.g. ER_AU_INVALID_PASSWORD) are reported as before. */
+ * failures (e.g. ER_AU_LOGIN_FAILED) are reported as before. */
 static int
 cubrid_log_map_connect_error (int error)
 {

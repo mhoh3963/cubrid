@@ -1759,7 +1759,10 @@
 
 #define ER_STATS_FULLSCAN_TO_SAMPLING               -1371
 
-#define ER_LAST_ERROR                               -1372
+#define ER_AU_PASSWORD_POLICY_VIOLATION             -1372
+#define ER_AU_LOGIN_FAILED                          -1373
+
+#define ER_LAST_ERROR                               -1374
 
 
 /*

@@ -171,6 +171,14 @@ parse_user_define_line (char *line_buffer, FILE * output_file)
   token = strtok_r (line_buffer, delim, &save_ptr);
   if (token != NULL && strcasecmp (token, COMMAND_USER) == 0)
     {
+      /* the file can not give a password, so no user is made from it under the complexity policy */
+      if (au_is_complexity_policy_enabled ())
+	{
+	  er_set (ER_ERROR_SEVERITY, ARG_FILE_LINE, ER_AU_PASSWORD_POLICY_VIOLATION, 0);
+	  fprintf (output_file, "%s\n", db_error_string (3));
+	  return ER_GENERIC_ERROR;
+	}
+
       /* A second word must be an user's name. */
       token = strtok_r (NULL, delim, &save_ptr);
       if (token == NULL || (user = au_add_user (token, &exists)) == NULL)

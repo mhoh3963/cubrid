@@ -2073,6 +2073,18 @@ do_create_user (const PARSER_CONTEXT * parser, const PT_NODE * statement)
 	}
     }
 
+  /* with the complexity policy, PASSWORD is required and checked before the user is created */
+  if (au_is_complexity_policy_enabled ())
+    {
+      node = statement->info.create_user.password;
+      password = (node && IS_STRING (node)) ? GET_STRING (node) : NULL;
+      error = au_check_password_policy (user_name, password);
+      if (error != NO_ERROR)
+	{
+	  return error;
+	}
+    }
+
   error = tran_system_savepoint (UNIQUE_SAVEPOINT_CREATE_USER_ENTITY);
   if (error != NO_ERROR)
     {
@@ -2080,8 +2092,9 @@ do_create_user (const PARSER_CONTEXT * parser, const PT_NODE * statement)
     }
   set_savepoint = true;
 
+  /* not db_add_user (), which refuses to make a user without a password under the complexity policy */
   exists = 0;
-  user = db_add_user (user_name, &exists);
+  user = au_add_user (user_name, &exists);
   if (user == NULL)
     {
       assert (er_errid () != NO_ERROR);

@@ -1810,7 +1810,7 @@ tranlist (UTIL_FUNCTION_ARG * arg)
     {
       char msg_buf[64];
 
-      if (error == ER_AU_INVALID_PASSWORD && password == NULL)
+      if (error == ER_AU_LOGIN_FAILED && password == NULL)
 	{
 	  /*
 	   * prompt for a valid password and try again, need a reusable
@@ -2022,7 +2022,7 @@ killtran (UTIL_FUNCTION_ARG * arg)
   error = db_restart (arg->command_name, TRUE, database_name);
   if (error)
     {
-      if (error == ER_AU_INVALID_PASSWORD && (dba_password == NULL || strlen (dba_password) == 0))
+      if (error == ER_AU_LOGIN_FAILED && (dba_password == NULL || strlen (dba_password) == 0))
 	{
 	  /*
 	   * prompt for a valid password and try again, need a reusable
@@ -3944,7 +3944,7 @@ tde (UTIL_FUNCTION_ARG * arg)
   error = db_restart (arg->command_name, TRUE, database_name);
   if (error)
     {
-      if (error == ER_AU_INVALID_PASSWORD && (dba_password == NULL || strlen (dba_password) == 0))
+      if (error == ER_AU_LOGIN_FAILED && (dba_password == NULL || strlen (dba_password) == 0))
 	{
 	  /*
 	   * prompt for a valid password and try again, need a reusable
@@ -4370,7 +4370,7 @@ flashback (UTIL_FUNCTION_ARG * arg)
   error = db_restart (arg->command_name, TRUE, database_name);
   if (error)
     {
-      if (error == ER_AU_INVALID_PASSWORD && (dba_password == NULL || strlen (dba_password) == 0))
+      if (error == ER_AU_LOGIN_FAILED && (dba_password == NULL || strlen (dba_password) == 0))
 	{
 	  /*
 	   * prompt for a valid password and try again, need a reusable

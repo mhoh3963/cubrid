@@ -1736,6 +1736,13 @@ db_add_user (const char *name, int *exists)
   CHECK_1ARG_NULL (name);
   CHECK_MODIFICATION_NULL ();
 
+  /* this API makes a user without a password, which the complexity policy does not allow */
+  if (au_is_complexity_policy_enabled ())
+    {
+      er_set (ER_ERROR_SEVERITY, ARG_FILE_LINE, ER_AU_PASSWORD_POLICY_VIOLATION, 0);
+      return NULL;
+    }
+
   retval = au_add_user (name, exists);
 
   return (retval);
