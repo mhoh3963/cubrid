@@ -88,6 +88,7 @@ static const char *release_string = makestring (RELEASE_STRING);
 static const char *major_release_string = makestring (MAJOR_RELEASE_STRING);
 static const char *build_number = makestring (BUILD_NUMBER);
 static const char *package_string = PACKAGE_STRING;
+static const char *product_string = PRODUCT_STRING;
 static const char *build_os = makestring (BUILD_OS);
 static const char *build_type = makestring (BUILD_TYPE);
 
@@ -133,6 +134,16 @@ const char *
 rel_name (void)
 {
   return package_string;
+}
+
+/*
+ * rel_display_version - Name of the product with the full version, as shown on the screen
+ *   return: static character string, e.g. "CUBRID 11.4 (11.4.7.1996-76c8c0e)"
+ */
+const char *
+rel_display_version (void)
+{
+  return product_string;
 }
 
 /*

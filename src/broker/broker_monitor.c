@@ -497,7 +497,7 @@ main (int argc, char **argv)
 
   if (argc == 2 && strcmp (argv[1], "--version") == 0)
     {
-      fprintf (stderr, "VERSION %s\n", makestring (BUILD_NUMBER));
+      fprintf (stderr, "%s (%s)\n", PACKAGE_STRING, VERSION_STRING);
       return 3;
     }
 

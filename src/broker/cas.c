@@ -524,7 +524,7 @@ main (int argc, char *argv[])
   program_name = argv[0];
   if (argc == 2 && strcmp (argv[1], "--version") == 0)
     {
-      printf ("%s\n", makestring (BUILD_NUMBER));
+      printf ("%s (%s)\n", PACKAGE_STRING, VERSION_STRING);
       return 0;
     }
 #else /* !WINDOWS */

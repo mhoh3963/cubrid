@@ -90,7 +90,7 @@ $set 1 MSGCAT_UTIL_SET_GENERIC
 %2$s\n\
 Copyright (C) 2008 Search Solution Corporation.\nCopyright (C) 2016 CUBRID Corporation.\n
 10 \
-cubrid administrator utility, version %1$s\n\
+cubrid administrator utility, %1$s\n\
 usage: %2$s <utility-name> [args]\n\
 Type '%3$s <utility-name>' for help on a specific utility.\n\
 \n\
@@ -146,7 +146,7 @@ For additional information, see http://www.cubrid.org\n
 20 ++ %1$s is running.\n
 21 ++ %1$s %2$s: %3$s\n
 22 One or more arguments are missing.\nType 'cubrid --help' to see usage.\n
-23 cubrid utility, version %1$s\n\
+23 cubrid utility, %1$s\n\
 usage: %2$s <utility-name> [args]\n\
 Type '%3$s <utility-name>' for help on a specific utility.\n\
 \n\
@@ -198,7 +198,7 @@ Available administrator's utilities:\n\
 \n\
 %4$s is a tool for DBMS.\n\
 For additional information, see http://www.cubrid.org\n
-24 cubrid utility, version %1$s\n\
+24 cubrid utility, %1$s\n\
 usage: %2$s service <command>\n\
 \n\
 Available command:\n\
@@ -206,7 +206,7 @@ Available command:\n\
     stop\n\
     restart\n\
     status\n
-25 cubrid utility, version %1$s\n\
+25 cubrid utility, %1$s\n\
 usage: %2$s server <command> [args]\n\
 \n\
 Available command:\n\
@@ -216,7 +216,7 @@ Available command:\n\
     status\n\
     acl         <status|reload> database-name\n
 37 The server was configured for HA.\n
-26 cubrid utility, version %1$s\n\
+26 cubrid utility, %1$s\n\
 usage: %2$s broker <command> [args]\n\
 \n\
 Available command:\n\
@@ -231,14 +231,14 @@ Available command:\n\
     acl         <status|reload> [broker-name]\n\
     getid       -b <broker-name> [-f] shard-key\n\
     test        broker-name [-D <database_name>] [-u <user_name>] [-p <user_password>] [-c <SQL_command>] [-i <input_file>] [-o <output_file>] [-v] [-s]\n
-27 cubrid utility, version %1$s\n\
+27 cubrid utility, %1$s\n\
 usage: %2$s manager <command>\n\
 \n\
 Available command:\n\
     start\n\
     stop\n\
     status\n
-28 cubrid utility, version %1$s\n\
+28 cubrid utility, %1$s\n\
 usage: %2$s heartbeat <command> [args]\n\
 \n\
 Available command:\n\
@@ -261,13 +261,13 @@ Available command:\n\
 41 cubrid manager server is not installed.\n
 42 Invalid argument.\n
 43 File(%1$s) open error.\n
-44 cubrid utility, version %1$s\n\
+44 cubrid utility, %1$s\n\
 usage: %2$s pl <command> [args]\n\
 \n\
 Available command:\n\
     restart     [database-name]\n\
     status      [database-name]\n
-45 cubrid utility, version %1$s\n\
+45 cubrid utility, %1$s\n\
 usage: %2$s gateway <command> [args]\n\
 \n\
 Available command:\n\

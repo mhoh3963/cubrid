@@ -53,7 +53,7 @@ main (int argc, char *argv[])
 
   if (argc == 2 && strcmp (argv[1], "--version") == 0)
     {
-      printf ("VERSION %s\n", makestring (BUILD_NUMBER));
+      printf ("%s (%s)\n", PACKAGE_STRING, VERSION_STRING);
       return 0;
     }
 

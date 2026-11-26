@@ -1406,7 +1406,7 @@ admin_getid_cmd (int master_shm_id, int argc, const char **argv)
 
   if (argc == 3 && strcmp (argv[2], "--version") == 0)
     {
-      fprintf (stderr, "VERSION %s\n", makestring (BUILD_NUMBER));
+      fprintf (stderr, "%s (%s)\n", PACKAGE_STRING, VERSION_STRING);
       return 0;
     }
 

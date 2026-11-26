@@ -590,7 +590,7 @@ boot_initialize_client (BOOT_CLIENT_CREDENTIAL * client_credential, BOOT_DB_PATH
       /* print version string */
       strncpy_bufsize (format, msgcat_message (MSGCAT_CATALOG_CUBRID, MSGCAT_SET_GENERAL,
 					       MSGCAT_GENERAL_DATABASE_INIT));
-      (void) fprintf (stdout, format, rel_name ());
+      (void) fprintf (stdout, format, rel_display_version ());
 #endif /* CS_MODE */
     }
 

@@ -1570,7 +1570,7 @@ er_stop_on_error (void)
   int exit_requested;
 
 #if !defined (WINDOWS)
-  syslog (LOG_ALERT, er_Cached_msg[ER_STOP_SYSLOG], rel_name (), er_errid (), cuserid (NULL), getpid ());
+  syslog (LOG_ALERT, er_Cached_msg[ER_STOP_SYSLOG], rel_display_version (), er_errid (), cuserid (NULL), getpid ());
 #endif /* !WINDOWS */
 
   (void) fprintf (stderr, "%s", er_Cached_msg[ER_ER_ASK]);

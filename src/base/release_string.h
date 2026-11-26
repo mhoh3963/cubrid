@@ -52,6 +52,7 @@ typedef enum
 } REL_COMPATIBILITY;
 
 extern const char *rel_name (void);
+extern const char *rel_display_version (void);
 extern const char *rel_release_string (void);
 extern const char *rel_major_release_string (void);
 extern const char *rel_build_number (void);

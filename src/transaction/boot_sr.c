@@ -1964,10 +1964,9 @@ xboot_initialize_server (const BOOT_CLIENT_CREDENTIAL * client_credential, BOOT_
 #if defined (NDEBUG)
   strncpy_size (format, msgcat_message (MSGCAT_CATALOG_CUBRID, MSGCAT_SET_GENERAL, MSGCAT_GENERAL_DATABASE_INIT),
 		BOOT_FORMAT_MAX_LENGTH);
-  fprintf (stdout, format, rel_name (), rel_build_number ());
+  fprintf (stdout, format, rel_display_version ());
 #else /* NDEBUG */
-  fprintf (stdout, "\n%s (%s) (%d %s build)\n\n", rel_name (), rel_build_number (), rel_bit_platform (),
-	   rel_build_type ());
+  fprintf (stdout, "\n%s (%d %s build)\n\n", rel_display_version (), rel_bit_platform (), rel_build_type ());
 #endif /* !NDEBUG */
 
   if (old_ctrl_c_handler != SIG_ERR)
@@ -2775,10 +2774,9 @@ boot_restart_server (THREAD_ENTRY * thread_p, bool print_restart, const char *db
 #if defined (NDEBUG)
       strncpy_size (format, msgcat_message (MSGCAT_CATALOG_CUBRID, MSGCAT_SET_GENERAL, MSGCAT_GENERAL_DATABASE_INIT),
 		    BOOT_FORMAT_MAX_LENGTH);
-      fprintf (stdout, format, rel_name ());
+      fprintf (stdout, format, rel_display_version ());
 #else /* NDEBUG */
-      fprintf (stdout, "\n%s (%s) (%d %s build)\n\n", rel_name (), rel_build_number (), rel_bit_platform (),
-	       rel_build_type ());
+      fprintf (stdout, "\n%s (%d %s build)\n\n", rel_display_version (), rel_bit_platform (), rel_build_type ());
 #endif /* !NDEBUG */
       fflush (stdout);
     }

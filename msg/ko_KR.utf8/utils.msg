@@ -90,7 +90,7 @@ $set 1 MSGCAT_UTIL_SET_GENERIC
 %2$s\n\
 Copyright (C) 2008 Search Solution Corporation.\nCopyright (C) 2016 CUBRID Corporation.\n
 10 \
-cubrid 관리자 유틸리티, 버전 %1$s\n\
+cubrid 관리자 유틸리티, %1$s\n\
 사용법: %2$s <유틸리티 이름> [옵션]\n\
 각 유틸리티에 대한 도움말을 원하면 '%3$s <유틸리티 이름>'  명령을 수행 하세요.\n\
 \n\
@@ -146,7 +146,7 @@ cubrid 관리자 유틸리티, 버전 %1$s\n\
 20 ++ %1$s (이)가 수행되고 있습니다.\n
 21 ++ %1$s %2$s: %3$s\n
 22 인자가 부족합니다. \n'cubrid --help' 명령어로 사용법을 알아보세요.\n
-23 cubrid 유틸리티, 버전 %1$s\n\
+23 cubrid 유틸리티, %1$s\n\
 사용법: %2$s <유틸리티 이름> [인자]\n\
 '%3$s <utility-name>' 명령어로 각 유틸리티에 대한 도움말을 보실 수 있습니다.\n\
 \n\
@@ -198,7 +198,7 @@ cubrid 관리자 유틸리티, 버전 %1$s\n\
 \n\
 %4$s (은)는 DBMS  도구입니다.\n\
 추가적인 정보는 다음 사이트를 참조하세요. http://www.cubrid.org\n
-24 cubrid 유틸리티, 버전 %1$s\n\
+24 cubrid 유틸리티, %1$s\n\
 사용법: %2$s service <명령어>\n\
 \n\
 가용한 명령어:\n\
@@ -206,7 +206,7 @@ cubrid 관리자 유틸리티, 버전 %1$s\n\
     stop\n\
     restart\n\
     status\n
-25 cubrid 유틸리티, 버전 %1$s\n\
+25 cubrid 유틸리티, %1$s\n\
 사용법: %2$s server <명령어> [인자]\n\
 \n\
 가용한 명령어:\n\
@@ -216,7 +216,7 @@ cubrid 관리자 유틸리티, 버전 %1$s\n\
     status\n\
     acl         <status|reload> 데이터베이스 이름\n
 37 서버가 HA 모드로 설정되어 있습니다.\n
-26 cubrid 유틸리티, 버전 %1$s\n\
+26 cubrid 유틸리티, %1$s\n\
 사용법: %2$s broker <명령어> [인자]\n\
 \n\
 가용한 명령어:\n\
@@ -231,14 +231,14 @@ cubrid 관리자 유틸리티, 버전 %1$s\n\
     acl         <status|reload> [브로커 이름]\n\
     getid       -b <브로커 이름> [-f] shard-key\n\
     test        <브로커 이름> [-D <database_name>] [-u <user_name>] [-p <user_password>] [-c <SQL_command>] [-i <input_file>] [-o <output_file>] [-v] [-s]\n
-27 cubrid 유틸리티, 버전 %1$s\n\
+27 cubrid 유틸리티, %1$s\n\
 사용법: %2$s manager <명령어>\n\
 \n\
 가용한 명령어:\n\
     start\n\
     stop\n\
     status\n
-28 cubrid 유틸리티, 버전 %1$s\n\
+28 cubrid 유틸리티, %1$s\n\
 사용법: %2$s heartbeat <명령어> [인자]\n\
 \n\
 가용한 명령어:\n\
@@ -261,13 +261,13 @@ cubrid 관리자 유틸리티, 버전 %1$s\n\
 41 CUBRID 메니저가 설치되지 않았습니다.\n
 42 인자가 잘못되었습니다.\n
 43 파일(%1$s)을 열지 못했습니다.\n
-44 cubrid 유틸리티, 버전 %1$s\n\
+44 cubrid 유틸리티, %1$s\n\
 사용법: %2$s pl <명령어> [인자]\n\
 \n\
 가용한 명령어:\n\
     restart     [데이터베이스 이름]\n\
     status      [데이터베이스 이름]\n
-45 cubrid 유틸리티, 버전 %1$s\n\
+45 cubrid 유틸리티, %1$s\n\
 사용법: %2$s gateway <명령어> [인자]\n\
 \n\
 가용한 명령어:\n\
