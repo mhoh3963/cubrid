@@ -10110,6 +10110,14 @@ pt_check_grant_revoke (PARSER_CONTEXT * parser, PT_NODE * node)
   for ((user = (node->node_type == PT_GRANT ? node->info.grant.user_list : node->info.revoke.user_list)); user;
        user = user->next)
     {
+      /* TO/FROM PUBLIC is kept for compatibility and means the renamed public user. The alias is applied only here,
+       * so other statements (OWNER TO, GROUPS, owner qualifiers) still treat PUBLIC as an ordinary name. */
+      if (user->node_type == PT_NAME && user->info.name.original != NULL
+	  && strcasecmp (user->info.name.original, AU_PUBLIC_ALIAS_NAME) == 0)
+	{
+	  user->info.name.original = pt_append_string (parser, NULL, AU_PUBLIC_USER_NAME);
+	}
+
       if (user->node_type == PT_NAME && (username = user->info.name.original) && !db_find_user (username))
 	{
 	  PT_ERRORmf (parser, user, MSGCAT_SET_PARSER_SEMANTIC, MSGCAT_SEMANTIC_USER_IS_NOT_IN_DB, username);

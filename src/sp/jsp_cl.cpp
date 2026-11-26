@@ -1514,7 +1514,7 @@ jsp_check_stored_procedure_name (const char *str)
 
   if (strncasecmp (str, "dbms_output.", dbms_output_len) == 0)
     {
-      sprintf (buffer, "public.dbms_output.%s",
+      sprintf (buffer, AU_PUBLIC_USER_NAME_LOWER ".dbms_output.%s",
 	       sm_downcase_name (str + dbms_output_len, tmp, SM_MAX_IDENTIFIER_LENGTH));
     }
   else

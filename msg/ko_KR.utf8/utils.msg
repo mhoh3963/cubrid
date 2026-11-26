@@ -498,7 +498,7 @@ loaddb: 데이터베이스에 객체 및 스키마 적재\n\
   -S, --SA-mode                  독립 모드 실행\n\
   -C, --CS-mode                  클라이언트 서버 모드 실행\n\
                                  경고: HA Mode 일때, 클라이언트-서버 모드에서는 데이터 파일(-d, --data-file=FILE)만 로드할 수 있습니다.\n\
-  -u, --user=ID                  데이터베이스 접근에 관한 사용자 이름; 기본값: "public"\n\
+  -u, --user=ID                  데이터베이스 접근에 관한 사용자 이름; 기본값: "cmember"\n\
   -p, --password=PASS            사용자 패스워드; 기본값: 없음\n\
       --data-file-check-only     데이터 파일을 로딩하지 않고 신택스만 검사; 기본값: 아니오\n\
   -l, --load-only                신택스 체크없이 데이터 파일 로딩; SA_MODE만 지원\n\
@@ -539,7 +539,7 @@ unloaddb: 데이터베이스에서 스키마와 객체를 언로드\n\
 사용법: %1$s unloaddb [옵션] <데이터베이스 이름>\n\
 \n\
 옵션:\n\
-  -u, --user=ID               데이터베이스 접근에 관한 사용자 이름; 기본값: "dba"\n\
+  -u, --user=ID               데이터베이스 접근에 관한 사용자 이름; 기본값: "cmaster"\n\
   -p, --password=PASS         사용자 패스워드; 기본값: 없음\n\
   -i, --input-class-file=FILE 테이블 이름이 기입된 파일; 기본값: 모든 클래스\n\
       --include-reference     참조되는 테이블 포함; 기본값: 허용하지 않음(-i가 지정 되야 함)\n\
@@ -1243,7 +1243,7 @@ valid options:\n\
   -i, --include-class-file=FILE 포함시킬 테이블을 지정하는 입력 파일\n\
   -e, --exclude-class-file=FILE 제외시킬 테이블을 지정하는 입력 파일; -i 또는 -e 하나만 명시 가능, 동시 지정 불가\n\
   -t, --timeout=NUMBER          밀리초 단위 쿼리 타임 아웃; 기본값: 1000 ms\n\
-  -n, --table-name=NAME         체크섬 결과를 저장할 테이블 이름; 기본값: dba.db_ha_checksum\n\
+  -n, --table-name=NAME         체크섬 결과를 저장할 테이블 이름; 기본값: cmaster.db_ha_checksum\n\
   -r, --report-only             체크섬 계산을 기반하여 복제 일관성 상태 보고\n\
                                 --table-name 옵션 외에 다른 옵션은 모두 무시됨\n\
       --resume                  체크섬 계산 복귀\n\

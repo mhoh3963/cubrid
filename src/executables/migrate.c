@@ -44,6 +44,7 @@
 #include "error_manager.h"
 #include "system_parameter.h"
 #include "language_support.h"
+#include "authenticate_user_names.h"
 
 #define V9_1_LEVEL (9.1f)
 #define V9_2_LEVEL (9.2f)
@@ -473,7 +474,7 @@ main (int argc, char *argv[])
 
   /* boot_set_skip_check_ct_classes (true); */
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
 
   if (db_restart (argv[0], TRUE, db_name) != NO_ERROR)
     {

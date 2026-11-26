@@ -27,7 +27,7 @@ slot_selected=0
 slot_size=(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
 num_tables_slot=(0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)
 database=""
-user="-u dba"
+user="-u cmaster"
 pass=""
 total_pages=0
 filename=""
@@ -48,7 +48,7 @@ function show_usage ()
 	echo " OPTIONS"
 	echo "  -t arg  Set number of parallel process; default 8, max 16"
 	echo "  -i arg  input FILE of table names; default: dump all classes"
-	echo "  -u arg  Set database user name; default dba"
+	echo "  -u arg  Set database user name; default cmaster"
 	echo "  -D arg  Set directory for unloaddb output dir/files"
 	echo "  -v      Set verbose mode on"
 	echo "  -d      dump objects only; default: schema and objects"
@@ -126,7 +126,7 @@ function verify_user_pass ()
 	local USERNAME
 	local dbuser
 	local passwd
-	local qry_dba_grp="SELECT u.name FROM db_user AS u, TABLE(u.groups) AS g(x) where x.name = 'DBA'"
+	local qry_dba_grp="SELECT u.name FROM db_user AS u, TABLE(u.groups) AS g(x) where x.name = 'CMASTER'"
 
 	dbuser=$(echo ${user} | cut -d' ' -f2-2)
 	USERNAME=$(echo ${dbuser} | tr [:lower:] [:upper:])
@@ -149,7 +149,7 @@ function verify_user_pass ()
 	# check whether this user is a member of DBA groups
 	#
 	dba_groups=$(csql $user $pass -l -c "$qry_dba_grp" $database | grep -w $USERNAME | wc -l)
-	if [ $USERNAME != "DBA" ] && [ $dba_groups -eq 0 ];then
+	if [ $USERNAME != "CMASTER" ] && [ $dba_groups -eq 0 ];then
 		echo "User '$dbuser' is not a member of DBA group"
 		exit 2
 	fi
@@ -181,7 +181,7 @@ function silent_cd ()
 }
 
 #
-# run csql -u dba -l -c "show heap capacity of code" demodb
+# run csql -u cmaster -l -c "show heap capacity of code" demodb
 # extract Num_recs, Avg_rec_len for the table
 # size = Num_recs * Avg_rec_len
 #

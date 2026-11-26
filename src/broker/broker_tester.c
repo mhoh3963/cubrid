@@ -52,13 +52,14 @@
 #endif /* WINDOWS */
 
 #include "ini_parser.h"
+#include "authenticate_user_names.h"
 
 #define TESTER_ERR_MSG_SIZE            1024
 #define TIME_BUF_SIZE                  50
 #define	MAX_DISPLAY_LENGTH             20
 
 #define DEFAULT_EMPTY_STRING           "\0"
-#define DEFAULT_CUB_USER_NAME          "PUBLIC"
+#define DEFAULT_CUB_USER_NAME          AU_PUBLIC_USER_NAME
 #define DEFAULT_ORACLE_USER_NAME       "scott"
 #define DEFAULT_ORACLE_PASSWORD        "tiger"
 #define DEFAULT_MYSQL_USER_NAME        "root"

@@ -79,6 +79,7 @@
 #include "xasl_cache.h"
 #include "session.h"
 #include "pl_session.hpp"
+#include "authenticate_user_names.h"
 
 // XXX: SHOULD BE THE LAST INCLUDE HEADER
 #include "memory_wrapper.hpp"
@@ -757,7 +758,7 @@ logtb_am_i_dba_client (THREAD_ENTRY * thread_p)
   const char *db_user;
 
   db_user = logtb_find_current_client_name (thread_p);
-  return (db_user != NULL && !strcasecmp (db_user, "DBA"));
+  return (db_user != NULL && !strcasecmp (db_user, AU_DBA_USER_NAME));
 }
 
 /*

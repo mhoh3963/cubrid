@@ -44,6 +44,7 @@
 #include "porting.h"
 #include "cas_cci.h"
 #include "broker_log_util.h"
+#include "authenticate_user_names.h"
 
 #define PRINT_CCI_ERROR(ERRCODE, CCI_ERROR, result_fp)	\
 	do {					\
@@ -244,7 +245,7 @@ main (int argc, char *argv[])
       return -1;
     }
   if (dbuser == NULL)
-    dbuser = (char *) "PUBLIC";
+    dbuser = (char *) AU_PUBLIC_USER_NAME;
   if (dbpasswd == NULL)
     dbpasswd = (char *) "";
 

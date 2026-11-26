@@ -96,6 +96,7 @@
 #include "dbtype.h"
 #include "cnv.h"
 #include "flashback.h"
+#include "authenticate_user_names.h"
 // XXX: SHOULD BE THE LAST INCLUDE HEADER
 #include "memory_wrapper.hpp"
 
@@ -14716,7 +14717,7 @@ cdc_get_user_info (THREAD_ENTRY * thread_p, const char *user_name, char *passwor
       goto end;
     }
 
-  dba_found = cdc_find_user_oid (thread_p, "DBA", &dba_oid);
+  dba_found = cdc_find_user_oid (thread_p, AU_DBA_USER_NAME, &dba_oid);
   if (dba_found && OID_EQ (&user_oid, &dba_oid))
     {
       *is_dba_group = true;

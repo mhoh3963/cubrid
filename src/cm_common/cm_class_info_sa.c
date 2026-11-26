@@ -39,6 +39,7 @@
 #include "cm_portable.h"
 #include "cm_execute_sa.h"
 #include "dbtype.h"
+#include "authenticate_user_names.h"
 
 #define MSGFMT	"%s %s\n"
 
@@ -234,7 +235,7 @@ dbmt_user_login (int argc, char *argv[], int opt_begin)
       goto login_err;
     }
 
-  if (strcasecmp (dbuser, "DBA") == 0)
+  if (strcasecmp (dbuser, AU_DBA_USER_NAME) == 0)
     {
       isdba = true;
     }
@@ -260,7 +261,7 @@ dbmt_user_login (int argc, char *argv[], int opt_begin)
 	  obj = db_get_object (&v);
 	  db_get (obj, "name", &v);
 	  username = db_get_string (&v);
-	  if (username != NULL && strcasecmp (username, "DBA") == 0)
+	  if (username != NULL && strcasecmp (username, AU_DBA_USER_NAME) == 0)
 	    {
 	      isdba = true;
 	      break;

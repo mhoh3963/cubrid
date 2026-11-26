@@ -32,6 +32,7 @@
 #include "utility.h"
 #include "util_support.h"
 #include "cubrid_getopt.h"
+#include "authenticate_user_names.h"
 
 typedef const char *(*CSQL_GET_MESSAGE) (int message_index);
 typedef int (*CSQL) (const char *argv0, CSQL_ARGUMENT * csql_arg);
@@ -435,7 +436,7 @@ main (int argc, char *argv[])
     }
 
   if ((csql_arg.sysadm || csql_arg.sysadm_rebuild_catalog)
-      && (csql_arg.user_name == NULL || strcasecmp (csql_arg.user_name, "DBA")))
+      && (csql_arg.user_name == NULL || strcasecmp (csql_arg.user_name, AU_DBA_USER_NAME)))
     {
       /* sysadm is allowed only to DBA */
       goto print_usage;

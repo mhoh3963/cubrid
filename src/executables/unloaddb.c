@@ -284,7 +284,7 @@ unloaddb (UTIL_FUNCTION_ARG * arg)
    */
   if (user == NULL || user[0] == '\0')
     {
-      user = (char *) "DBA";
+      user = (char *) AU_DBA_USER_NAME;
     }
 
   error = db_restart_ex (exec_name, database_name, user, password, NULL, DB_CLIENT_TYPE_ADMIN_UTILITY);

@@ -32,8 +32,7 @@
 #define AU_PASSWORD_CLASS_NAME  CT_PASSWORD_NAME
 #define AU_AUTH_CLASS_NAME      CT_AUTHORIZATION_NAME
 
-#define AU_PUBLIC_USER_NAME     "PUBLIC"
-#define AU_DBA_USER_NAME        "DBA"
+#include "authenticate_user_names.h"
 
 /*
  * Authorization Types

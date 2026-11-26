@@ -43,6 +43,7 @@
 #include "shard_shm.h"
 #include "broker_acl.h"
 #include "system_parameter.h"
+#include "authenticate_user_names.h"
 
 #ifndef min
 #define min(a,b)    ((a) < (b) ? (a) : (b))
@@ -1695,7 +1696,7 @@ proxy_process_client_register (T_SOCKET_IO * sock_io_p)
   db_user[SRV_CON_DBUSER_SIZE - 1] = '\0';
   if (db_user[0] == '\0')
     {
-      strcpy (db_user, "PUBLIC");
+      strcpy (db_user, AU_PUBLIC_USER_NAME);
     }
 
   db_passwd = db_user + SRV_CON_DBUSER_SIZE;

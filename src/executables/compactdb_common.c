@@ -133,7 +133,7 @@ get_class_mops (char **class_names, int num_class, MOP ** class_list, int *num_c
 
       sm_qualifier_name (class_names[i], owner_name, DB_MAX_USER_LENGTH);
       class_name_only = sm_remove_qualifier_name (class_names[i]);
-      if (strcasecmp (owner_name, "dba") == 0 && sm_check_system_class_by_name (class_name_only))
+      if (strcasecmp (owner_name, AU_DBA_USER_NAME_LOWER) == 0 && sm_check_system_class_by_name (class_name_only))
 	{
 	  class_name_p = class_name_only;
 	}

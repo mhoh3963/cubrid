@@ -10707,7 +10707,7 @@ pt_set_user_specified_name (PARSER_CONTEXT * parser, PT_NODE * node, void *arg, 
 	    if (target_owner_name == NULL
 		&& sm_check_system_class_by_name (PT_NAME_ORIGINAL (PT_SYNONYM_TARGET_NAME (node))) == true)
 	      {
-		PT_SYNONYM_TARGET_OWNER_NAME (node) = pt_name (parser, "dba");
+		PT_SYNONYM_TARGET_OWNER_NAME (node) = pt_name (parser, AU_DBA_USER_NAME_LOWER);
 	      }
 	    else
 	      {
@@ -10745,7 +10745,7 @@ pt_set_user_specified_name (PARSER_CONTEXT * parser, PT_NODE * node, void *arg, 
 	if (target_owner_name == NULL
 	    && sm_check_system_class_by_name (PT_NAME_ORIGINAL (PT_SYNONYM_TARGET_NAME (node))) == true)
 	  {
-	    PT_SYNONYM_TARGET_OWNER_NAME (node) = pt_name (parser, "dba");
+	    PT_SYNONYM_TARGET_OWNER_NAME (node) = pt_name (parser, AU_DBA_USER_NAME_LOWER);
 	  }
 	else
 	  {

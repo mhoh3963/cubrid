@@ -37,7 +37,7 @@ declare -r -a  sort_titles=(
 
 # global variable
 database=""
-user="-u dba"
+user="-u cmaster"
 pass=""
 target_owner=""
 target_table=""
@@ -78,7 +78,7 @@ function show_usage ()
 	echo " OPTIONS"
 	echo "  -C client-server mode execution, default"
 	echo "  -S standalone mode execution"
-	echo "  -u, --user=ARG      Set database user name(only DBA or DBA group member); default dba"
+	echo "  -u, --user=ARG      Set database user name(only DBA or DBA group member); default cmaster"
 	echo "  -p, --password=ARG  Set password of databases user name; default NULL"
 	echo "  -o, --owner=ARG     Set target owner name; default: NULL"
 	echo "  -c, --class=ARG     Set target class name; default: NULL"
@@ -191,7 +191,7 @@ function verify_user_pass ()
 	local USERNAME
 	local dbuser
 	local passwd
-	local qry_dba_grp="SELECT u.name FROM db_user AS u, TABLE(u.groups) AS g(x) where x.name = 'DBA'"
+	local qry_dba_grp="SELECT u.name FROM db_user AS u, TABLE(u.groups) AS g(x) where x.name = 'CMASTER'"
 
 	dbuser=$(echo ${user} | cut -d' ' -f2-2)
 	USERNAME=$(echo ${dbuser} | tr [:lower:] [:upper:])
@@ -221,7 +221,7 @@ function verify_user_pass ()
 	# check whether this user is a member of DBA groups
 	#
 	dba_groups=$(csql  ${connection_mode}  ${user} ${pass} -l -c "$qry_dba_grp" $database | grep -w $USERNAME | wc -l)
-	if [ $USERNAME != "DBA" ] && [ $dba_groups -eq 0 ];then
+	if [ $USERNAME != "CMASTER" ] && [ $dba_groups -eq 0 ];then
 		echo "User '$dbuser' is not a member of DBA group"
 		exit 2
 	fi

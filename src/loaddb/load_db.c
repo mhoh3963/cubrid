@@ -581,7 +581,7 @@ loaddb_internal (UTIL_FUNCTION_ARG * arg, int dba_mode)
   /* login */
   if (!args.user_name.empty () || !dba_mode)
     {
-      if (strcasecmp (args.user_name.c_str (), "DBA") == 0 && args.no_user_specified_name)
+      if (strcasecmp (args.user_name.c_str (), AU_DBA_USER_NAME) == 0 && args.no_user_specified_name)
 	{
 	  db_set_client_type (DB_CLIENT_TYPE_ADMIN_LOADDB_COMPAT_UNDER_11_2);
 	}
@@ -620,7 +620,7 @@ loaddb_internal (UTIL_FUNCTION_ARG * arg, int dba_mode)
       /* if we're in the protected DBA mode, just login without authorization */
       AU_DISABLE_PASSWORDS ();
       db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-      (void) db_login ("DBA", NULL);
+      (void) db_login (AU_DBA_USER_NAME, NULL);
       error = db_restart (arg->command_name, true, args.volume.c_str ());
 #endif
     }

@@ -81,6 +81,7 @@
 #endif /* !CAS_FOR_ORACLE && !CAS_FOR_MYSQL */
 #include "error_manager.h"
 #include "ddl_log.h"
+#include "authenticate_user_names.h"
 
 #if defined (CAS_FOR_CGW)
 #include "cas_cgw.h"
@@ -1147,7 +1148,7 @@ cas_main (void)
 	    db_user[SRV_CON_DBUSER_SIZE - 1] = '\0';
 	    if (db_user[0] == '\0')
 	      {
-		strcpy (db_user, "PUBLIC");
+		strcpy (db_user, AU_PUBLIC_USER_NAME);
 	      }
 
 	    db_passwd = db_user + SRV_CON_DBUSER_SIZE;

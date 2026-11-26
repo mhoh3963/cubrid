@@ -654,7 +654,7 @@ createdb (UTIL_FUNCTION_ARG * arg)
 	}
     }
 
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
   status = db_init (program_name, true, database_name, volume_path, NULL, log_path, lob_path, host_name, overwrite,
 		    comment, volume_spec_file_name, db_volume_pages, db_page_size, log_volume_pages, log_page_size,
 		    cubrid_charset);
@@ -735,7 +735,7 @@ createdb (UTIL_FUNCTION_ARG * arg)
       csql_arg.auto_commit = true;
       csql_arg.db_name = database_name;
       csql_arg.in_file_name = init_file_name;
-      csql_arg.user_name = strdup ("DBA");
+      csql_arg.user_name = strdup (AU_DBA_USER_NAME);
       csql (arg->command_name, &csql_arg);
     }
 
@@ -818,7 +818,7 @@ deletedb (UTIL_FUNCTION_ARG * arg)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
   if (boot_delete (database_name, force_delete) != NO_ERROR)
     {
       PRINT_AND_LOG_ERR_MSG ("%s\n", db_error_string (3));
@@ -1046,7 +1046,7 @@ restoredb (UTIL_FUNCTION_ARG * arg)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
   if (partial_recovery == true)
     {
       log_default_input_for_archive_log_location = 1;
@@ -1131,7 +1131,7 @@ renamedb (UTIL_FUNCTION_ARG * arg)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
   if (db_restart (arg->command_name, TRUE, src_db_name) != NO_ERROR)
     {
       PRINT_AND_LOG_ERR_MSG ("%s\n", db_error_string (3));
@@ -1242,7 +1242,7 @@ installdb (UTIL_FUNCTION_ARG * arg)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
   if (db_restart (arg->command_name, TRUE, db_name) != NO_ERROR)
     {
       PRINT_AND_LOG_ERR_MSG ("%s\n", db_error_string (3));
@@ -1352,7 +1352,7 @@ copydb (UTIL_FUNCTION_ARG * arg)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
 
   if (db_restart (arg->command_name, TRUE, src_db_name) != NO_ERROR)
     {
@@ -1433,7 +1433,7 @@ optimizedb (UTIL_FUNCTION_ARG * arg)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
   if (db_restart (arg->command_name, TRUE, db_name) != NO_ERROR)
     {
       PRINT_AND_LOG_ERR_MSG ("%s\n", db_error_string (3));
@@ -1454,7 +1454,7 @@ optimizedb (UTIL_FUNCTION_ARG * arg)
 
       sm_qualifier_name (class_name, owner_name, DB_MAX_USER_LENGTH);
       class_name_only = sm_remove_qualifier_name (class_name);
-      if (strcasecmp (owner_name, "dba") == 0 && sm_check_system_class_by_name (class_name_only))
+      if (strcasecmp (owner_name, AU_DBA_USER_NAME_LOWER) == 0 && sm_check_system_class_by_name (class_name_only))
 	{
 	  class_name_p = class_name_only;
 	}
@@ -1581,7 +1581,7 @@ diagdb (UTIL_FUNCTION_ARG * arg)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
   if (db_restart (arg->command_name, TRUE, db_name) != NO_ERROR)
     {
       PRINT_AND_LOG_ERR_MSG ("%s\n", db_error_string (3));
@@ -2741,7 +2741,7 @@ synccolldb (UTIL_FUNCTION_ARG * arg)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
   if (db_restart (arg->command_name, TRUE, db_name) != NO_ERROR)
     {
       PRINT_AND_LOG_ERR_MSG ("%s\n", db_error_string (3));
@@ -4725,7 +4725,7 @@ restoreslave (UTIL_FUNCTION_ARG * arg)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
 
   status = boot_restart_from_backup (true, database_name, &restart_arg);
   if (status == NULL_TRAN_INDEX)
@@ -4942,7 +4942,7 @@ gen_tz (UTIL_FUNCTION_ARG * arg)
 	{
 	  AU_DISABLE_PASSWORDS ();
 	  db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-	  db_login ("DBA", NULL);
+	  db_login (AU_DBA_USER_NAME, NULL);
 
 	  if (db_restart (arg->command_name, TRUE, db_info_p->name) != NO_ERROR)
 	    {

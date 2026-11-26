@@ -53,7 +53,7 @@
 
 #define CHKSUM_DEFAULT_LIST_SIZE	10
 #define CHKSUM_MIN_CHUNK_SIZE		100
-#define CHKSUM_DEFAULT_TABLE_OWNER_NAME	"dba"
+#define CHKSUM_DEFAULT_TABLE_OWNER_NAME	AU_DBA_USER_NAME_LOWER
 #define CHKSUM_DEFAULT_TABLE_NAME	"db_ha_checksum"
 #define CHKSUM_SCHEMA_TABLE_SUFFIX	"_schema"
 
@@ -2131,7 +2131,7 @@ checksumdb (UTIL_FUNCTION_ARG * arg)
 	}
 
       /* The owner of checksum_table must be a DBA. */
-      if (strncasecmp (checksum_table, "dba.", 4) != 0)
+      if (strncasecmp (checksum_table, AU_DBA_USER_NAME_LOWER ".", sizeof (AU_DBA_USER_NAME_LOWER ".") - 1) != 0)
 	{
 	  PRINT_AND_LOG_ERR_MSG (msgcat_message
 				 (MSGCAT_CATALOG_UTILS, MSGCAT_UTIL_SET_CHECKSUMDB, CHECKSUMDB_MSG_INVALID_OWNER));
@@ -2268,7 +2268,7 @@ begin:
   AU_DISABLE_PASSWORDS ();
 
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  if (db_login ("DBA", NULL) != NO_ERROR)
+  if (db_login (AU_DBA_USER_NAME, NULL) != NO_ERROR)
     {
       PRINT_AND_LOG_ERR_MSG ("%s\n", db_error_string (3));
       goto error_exit;

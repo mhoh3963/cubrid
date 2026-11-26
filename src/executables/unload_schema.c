@@ -768,7 +768,7 @@ export_serial (extract_context & ctxt, print_output & output_ctx)
 		  {
 		    if (DB_IS_NULL (&values[i]) || DB_VALUE_TYPE (&values[i]) != DB_TYPE_STRING)
 		      {
-			db_make_string (&values[i], "PUBLIC");
+			db_make_string (&values[i], AU_PUBLIC_USER_NAME);
 		      }
 		  }
 		  break;
@@ -975,7 +975,7 @@ emit_class_alter_serial (extract_context & ctxt, print_output & output_ctx)
 		  {
 		    if (DB_IS_NULL (&values[i]) || DB_VALUE_TYPE (&values[i]) != DB_TYPE_STRING)
 		      {
-			db_make_string (&values[i], "PUBLIC");
+			db_make_string (&values[i], AU_PUBLIC_USER_NAME);
 		      }
 		  }
 		  break;

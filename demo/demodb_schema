@@ -1,66 +1,66 @@
-call find_user('public') on class db_user to g_public;
-call find_user('PUBLIC') on class db_user to auser;
+call find_user('cmember') on class db_user to g_public;
+call find_user('CMEMBER') on class db_user to auser;
 create serial event_no
 	 start with 20422
 	 increment by 1
 	 minvalue 20422
 	 maxvalue 10000000000000000000000000000000000000
 	 nocycle;
-call change_serial_owner ('event_no', 'PUBLIC') on class db_serial;
+call change_serial_owner ('event_no', 'CMEMBER') on class db_serial;
 
-call find_user('PUBLIC') on class db_user to auser;
+call find_user('CMEMBER') on class db_user to auser;
 create serial stadium_no
 	 start with 30141
 	 increment by 1
 	 minvalue 30141
 	 maxvalue 10000000000000000000000000000000000000
 	 nocycle;
-call change_serial_owner ('stadium_no', 'PUBLIC') on class db_serial;
+call change_serial_owner ('stadium_no', 'CMEMBER') on class db_serial;
 
 CREATE CLASS stadium; 
-call change_owner('stadium', 'PUBLIC') on class db_root;
+call change_owner('stadium', 'CMEMBER') on class db_root;
 
 CREATE CLASS code;
-call change_owner('code', 'PUBLIC') on class db_root;
+call change_owner('code', 'CMEMBER') on class db_root;
 
 CREATE CLASS nation;
-call change_owner('nation', 'PUBLIC') on class db_root;
+call change_owner('nation', 'CMEMBER') on class db_root;
 
 CREATE CLASS [event];
-call change_owner('event', 'PUBLIC') on class db_root;
+call change_owner('event', 'CMEMBER') on class db_root;
 
 CREATE CLASS athlete;
-call change_owner('athlete', 'PUBLIC') on class db_root;
+call change_owner('athlete', 'CMEMBER') on class db_root;
 
 CREATE CLASS participant;
-call change_owner('participant', 'PUBLIC') on class db_root;
+call change_owner('participant', 'CMEMBER') on class db_root;
 
 CREATE CLASS olympic;
-call change_owner('olympic', 'PUBLIC') on class db_root;
+call change_owner('olympic', 'CMEMBER') on class db_root;
 
 CREATE CLASS game;
-call change_owner('game', 'PUBLIC') on class db_root;
+call change_owner('game', 'CMEMBER') on class db_root;
 
 CREATE CLASS record;
-call change_owner('record', 'PUBLIC') on class db_root;
+call change_owner('record', 'CMEMBER') on class db_root;
 
 CREATE CLASS history;
-call change_owner('history', 'PUBLIC') on class db_root;
+call change_owner('history', 'CMEMBER') on class db_root;
 
 
-CREATE PRIVATE SYNONYM athlete FOR public.athlete;
-CREATE PRIVATE SYNONYM code FOR public.code;
-CREATE PRIVATE SYNONYM [event] FOR public.[event];
-CREATE PRIVATE SYNONYM game FOR public.game;
-CREATE PRIVATE SYNONYM history FOR public.history;
-CREATE PRIVATE SYNONYM nation FOR public.nation;
-CREATE PRIVATE SYNONYM olympic FOR public.olympic;
-CREATE PRIVATE SYNONYM participant FOR public.participant;
-CREATE PRIVATE SYNONYM record FOR public.record;
-CREATE PRIVATE SYNONYM stadium FOR public.stadium;
+CREATE PRIVATE SYNONYM athlete FOR cmember.athlete;
+CREATE PRIVATE SYNONYM code FOR cmember.code;
+CREATE PRIVATE SYNONYM [event] FOR cmember.[event];
+CREATE PRIVATE SYNONYM game FOR cmember.game;
+CREATE PRIVATE SYNONYM history FOR cmember.history;
+CREATE PRIVATE SYNONYM nation FOR cmember.nation;
+CREATE PRIVATE SYNONYM olympic FOR cmember.olympic;
+CREATE PRIVATE SYNONYM participant FOR cmember.participant;
+CREATE PRIVATE SYNONYM record FOR cmember.record;
+CREATE PRIVATE SYNONYM stadium FOR cmember.stadium;
 
 
-ALTER CLASS public.stadium ADD ATTRIBUTE
+ALTER CLASS cmember.stadium ADD ATTRIBUTE
        code integer NOT NULL,
        nation_code character(3) NOT NULL,
        [name] character varying(50) NOT NULL,
@@ -69,27 +69,27 @@ ALTER CLASS public.stadium ADD ATTRIBUTE
        address character varying(100);
 
 
-ALTER CLASS public.stadium ADD ATTRIBUTE
+ALTER CLASS cmember.stadium ADD ATTRIBUTE
        CONSTRAINT [pk_stadium_code] PRIMARY KEY(code);
 
-ALTER CLASS public.code ADD ATTRIBUTE
+ALTER CLASS cmember.code ADD ATTRIBUTE
        s_name character(1),
        f_name character varying(6);
 
-ALTER CLASS public.code ADD ATTRIBUTE
+ALTER CLASS cmember.code ADD ATTRIBUTE
        CONSTRAINT [pk_code] PRIMARY KEY(s_name);
 
-ALTER CLASS public.nation ADD ATTRIBUTE
+ALTER CLASS cmember.nation ADD ATTRIBUTE
        code character(3) NOT NULL,
        [name] character varying(40) NOT NULL,
        continent character varying(10),
        capital character varying(30);
 
 
-ALTER CLASS public.nation ADD ATTRIBUTE
+ALTER CLASS cmember.nation ADD ATTRIBUTE
        CONSTRAINT [pk_nation_code] PRIMARY KEY(code);
 
-ALTER CLASS public.[event] ADD ATTRIBUTE
+ALTER CLASS cmember.[event] ADD ATTRIBUTE
        code integer NOT NULL,
        sports character varying(50),
        [name] character varying(50),
@@ -97,21 +97,21 @@ ALTER CLASS public.[event] ADD ATTRIBUTE
        players integer;
 
 
-ALTER CLASS public.[event] ADD ATTRIBUTE
+ALTER CLASS cmember.[event] ADD ATTRIBUTE
        CONSTRAINT [pk_event_code] PRIMARY KEY(code);
 
-ALTER CLASS public.athlete ADD ATTRIBUTE
+ALTER CLASS cmember.athlete ADD ATTRIBUTE
        code integer AUTO_INCREMENT(16693, 1) NOT NULL,
        [name] character varying(40) NOT NULL,
        gender character(1),
        nation_code character(3),
        [event] character varying(30);
-ALTER SERIAL public.athlete_ai_code START WITH 16693;
+ALTER SERIAL cmember.athlete_ai_code START WITH 16693;
 
-ALTER CLASS public.athlete ADD ATTRIBUTE
+ALTER CLASS cmember.athlete ADD ATTRIBUTE
        CONSTRAINT [pk_athlete_code] PRIMARY KEY(code);
 
-ALTER CLASS public.participant ADD ATTRIBUTE
+ALTER CLASS cmember.participant ADD ATTRIBUTE
        host_year integer NOT NULL,
        nation_code character(3) NOT NULL,
        gold integer DEFAULT 0,
@@ -119,10 +119,10 @@ ALTER CLASS public.participant ADD ATTRIBUTE
        bronze integer DEFAULT 0;
 
 
-ALTER CLASS public.participant ADD ATTRIBUTE
+ALTER CLASS cmember.participant ADD ATTRIBUTE
        CONSTRAINT [pk_participant_host_year_nation_code] PRIMARY KEY(host_year, nation_code);
 
-ALTER CLASS public.olympic ADD ATTRIBUTE
+ALTER CLASS cmember.olympic ADD ATTRIBUTE
        host_year integer NOT NULL,
        host_nation character varying(40) NOT NULL,
        host_city character varying(20) NOT NULL,
@@ -133,10 +133,10 @@ ALTER CLASS public.olympic ADD ATTRIBUTE
        introduction character varying(1500);
 
 
-ALTER CLASS public.olympic ADD ATTRIBUTE
+ALTER CLASS cmember.olympic ADD ATTRIBUTE
        CONSTRAINT [pk_olympic_host_year] PRIMARY KEY(host_year);
 
-ALTER CLASS public.game ADD ATTRIBUTE
+ALTER CLASS cmember.game ADD ATTRIBUTE
        host_year integer NOT NULL,
        event_code integer NOT NULL,
        athlete_code integer NOT NULL,
@@ -146,10 +146,10 @@ ALTER CLASS public.game ADD ATTRIBUTE
        game_date date;
 
 
-ALTER CLASS public.game ADD ATTRIBUTE
+ALTER CLASS cmember.game ADD ATTRIBUTE
        CONSTRAINT [pk_game_host_year_event_code_athlete_code] PRIMARY KEY(host_year, event_code, athlete_code);
 
-ALTER CLASS public.record ADD ATTRIBUTE
+ALTER CLASS cmember.record ADD ATTRIBUTE
        host_year integer NOT NULL,
        event_code integer NOT NULL,
        athlete_code integer NOT NULL,
@@ -158,10 +158,10 @@ ALTER CLASS public.record ADD ATTRIBUTE
        unit character varying(5);
 
 
-ALTER CLASS public.record ADD ATTRIBUTE
+ALTER CLASS cmember.record ADD ATTRIBUTE
        CONSTRAINT [pk_record_host_year_event_code_athlete_code_medal] PRIMARY KEY(host_year, event_code, athlete_code, medal);
 
-ALTER CLASS public.history ADD ATTRIBUTE
+ALTER CLASS cmember.history ADD ATTRIBUTE
        event_code integer NOT NULL,
        athlete character varying(40) NOT NULL,
        host_year integer,
@@ -169,18 +169,18 @@ ALTER CLASS public.history ADD ATTRIBUTE
        unit character varying(5);
 
 
-ALTER CLASS public.history ADD ATTRIBUTE
+ALTER CLASS cmember.history ADD ATTRIBUTE
        CONSTRAINT [pk_history_event_code_athlete] PRIMARY KEY(event_code, athlete);
 
 
 
-ALTER CLASS public.participant ADD CONSTRAINT [fk_participant_host_year] FOREIGN KEY(host_year) REFERENCES public.olympic ON DELETE RESTRICT ON UPDATE RESTRICT ;
+ALTER CLASS cmember.participant ADD CONSTRAINT [fk_participant_host_year] FOREIGN KEY(host_year) REFERENCES cmember.olympic ON DELETE RESTRICT ON UPDATE RESTRICT ;
 
-ALTER CLASS public.participant ADD CONSTRAINT [fk_participant_nation_code] FOREIGN KEY(nation_code) REFERENCES public.nation ON DELETE RESTRICT ON UPDATE RESTRICT ;
+ALTER CLASS cmember.participant ADD CONSTRAINT [fk_participant_nation_code] FOREIGN KEY(nation_code) REFERENCES cmember.nation ON DELETE RESTRICT ON UPDATE RESTRICT ;
 
-ALTER CLASS public.game ADD CONSTRAINT [fk_game_event_code] FOREIGN KEY(event_code) REFERENCES public.[event] ON DELETE RESTRICT ON UPDATE RESTRICT ;
+ALTER CLASS cmember.game ADD CONSTRAINT [fk_game_event_code] FOREIGN KEY(event_code) REFERENCES cmember.[event] ON DELETE RESTRICT ON UPDATE RESTRICT ;
 
-ALTER CLASS public.game ADD CONSTRAINT [fk_game_athlete_code] FOREIGN KEY(athlete_code) REFERENCES public.athlete ON DELETE RESTRICT ON UPDATE RESTRICT ;
+ALTER CLASS cmember.game ADD CONSTRAINT [fk_game_athlete_code] FOREIGN KEY(athlete_code) REFERENCES cmember.athlete ON DELETE RESTRICT ON UPDATE RESTRICT ;
 
 
 COMMIT WORK;

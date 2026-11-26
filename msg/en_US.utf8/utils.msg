@@ -505,7 +505,7 @@ valid options:\n\
   -S, --SA-mode                  standalone mode execution\n\
   -C, --CS-mode                  client-server mode execution\n\
                                  WARNING: When in HA Mode, only data files (-d, --data-file=FILE) can be loaded in client-server mode.\n\
-  -u, --user=ID                  user ID for database access; default: "public"\n\
+  -u, --user=ID                  user ID for database access; default: "cmember"\n\
   -p, --password=PASS            user password; default: none\n\
       --data-file-check-only     check syntax for data file without load; default: disabled\n\
   -l, --load-only                load data file without prior syntax checking; SA_MODE only\n\
@@ -546,7 +546,7 @@ unloaddb: Export objects and schemas from the database.\n\
 usage: %1$s unloaddb [OPTION] database-name\n\
 \n\
 valid options:\n\
-  -u, --user=ID               user ID for database access; default: "dba"\n\
+  -u, --user=ID               user ID for database access; default: "cmaster"\n\
   -p, --password=PASS         user password; default: none\n\
   -i, --input-class-file=FILE input FILE of table names; default: dump all classes\n\
       --include-reference     include referenced tables; with -i option; default: disabled\n\
@@ -1263,7 +1263,7 @@ valid options:\n\
   -i, --include-class-file=FILE input FILE of table names to include\n\
   -e, --exclude-class-file=FILE input FILE of table names to exclude; either -i or -e can be used, not both\n\
   -t, --timeout=NUMBER          query timeout in milliseconds; default: 1000 ms\n\
-  -n, --table-name=NAME         table name to save checksum results; default: dba.db_ha_checksum\n\
+  -n, --table-name=NAME         table name to save checksum results; default: cmaster.db_ha_checksum\n\
   -r, --report-only             report replication integrity based on checksum calculation\n\
                                 any options except --table-name will be ignored\n\
       --resume                  resume calculating checksum\n\

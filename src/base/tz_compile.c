@@ -6551,7 +6551,7 @@ tzc_update (TZ_DATA * tzd, const char *database_name)
 
   AU_DISABLE_PASSWORDS ();
   db_set_client_type (DB_CLIENT_TYPE_ADMIN_UTILITY);
-  db_login ("DBA", NULL);
+  db_login (AU_DBA_USER_NAME, NULL);
 
   tz_Compare_datetimetz_tz_id = true;
   tz_Compare_timestamptz_tz_id = true;

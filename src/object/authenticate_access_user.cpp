@@ -36,6 +36,8 @@
 #include "dbi.h"
 #include "schema_manager.h"
 #include "schema_system_catalog_constants.h"
+#include "intl_support.h"
+#include "language_support.h"
 
 /*
  * USER/GROUP ACCESS
@@ -537,21 +539,35 @@ au_is_user_group_member (MOP group_user, MOP user)
 }
 
 /*
- * TODO: return NO_ERROR in the previous implementation
- * check_user_name
+ * check_user_name - check the naming rule of a new user
  *   return: error code
  *   name(in): proposed user name
  *
- * Note: This is made void for ansi compatibility. It previously insured
- *       that identifiers which were accepted could be parsed in the
- *       language interface.
- *
- *       ANSI allows any character in an identifier. It also allows reserved
- *       words. In order to parse identifiers with non-alpha characters
- *       or that are reserved words, an escape syntax is definned with double
- *       quotes, "FROM", for example.
+ * Note: Every way of creating a user (CREATE USER, db_add_user, add_user method, loaddb) reaches au_add_user,
+ *       so the rule is checked here. A NULL name is left to the caller, which reports it separately.
+ *       The length is counted in characters, not bytes.
  */
-#define check_user_name(name) NO_ERROR
+static int
+check_user_name (const char *name)
+{
+  int char_count = 0;
+
+  if (name == NULL)
+    {
+      return NO_ERROR;
+    }
+
+  intl_char_count ((const unsigned char *) name, (int) strlen (name), lang_charset (), &char_count);
+
+  /* PUBLIC is reserved as the alias of the public user in GRANT/REVOKE */
+  if (char_count < AU_MIN_USER_NAME_LENGTH || intl_identifier_casecmp (name, AU_PUBLIC_ALIAS_NAME) == 0)
+    {
+      er_set (ER_ERROR_SEVERITY, ARG_FILE_LINE, ER_AU_INVALID_USER_NAME, 1, name);
+      return ER_AU_INVALID_USER_NAME;
+    }
+
+  return NO_ERROR;
+}
 
 
 /*
@@ -578,7 +594,7 @@ au_add_user (const char *name, int *exists)
     {
       er_set (ER_WARNING_SEVERITY, ARG_FILE_LINE, ER_AU_DBA_ONLY, 1, "add_user");
     }
-  else if (!check_user_name (name))
+  else if (check_user_name (name) == NO_ERROR)
     {
       AU_DISABLE (save);
       user = NULL;

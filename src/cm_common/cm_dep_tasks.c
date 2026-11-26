@@ -49,6 +49,7 @@
 #include "system_parameter.h"
 #include "dbtype.h"
 #include "object_primitive.h"
+#include "authenticate_user_names.h"
 
 extern int set_size (DB_COLLECTION * set);
 extern int set_get_element (DB_COLLECTION * set, int index, DB_VALUE * value);
@@ -450,7 +451,7 @@ cm_tsDBMTUserLogin (nvplist * in, nvplist * out, char *_dbmt_error)
       return ERR_WITH_MSG;
     }
 
-  if (uStringEqualIgnoreCase (dbuser, "DBA"))
+  if (uStringEqualIgnoreCase (dbuser, AU_DBA_USER_NAME))
     {
       nv_add_nvp (out, "authority", "isdba");
       db_shutdown ();
@@ -473,7 +474,7 @@ cm_tsDBMTUserLogin (nvplist * in, nvplist * out, char *_dbmt_error)
       db_set_get (col, i, &v);
       obj = db_get_object (&v);
       db_get (obj, "name", &v);
-      if (uStringEqualIgnoreCase (db_get_string (&v), "DBA"))
+      if (uStringEqualIgnoreCase (db_get_string (&v), AU_DBA_USER_NAME))
 	{
 	  isdba = true;
 	  break;
@@ -1065,7 +1066,7 @@ cm_ts_update_user (nvplist * req, nvplist * res, char *_dbmt_error)
   db_value_clear (&val);
 
 #if 0
-  if (db_add_member (db_find_user ("PUBLIC"), dbuser) < 0)
+  if (db_add_member (db_find_user (AU_PUBLIC_USER_NAME), dbuser) < 0)
     {
       goto error_return;
     }
